@@ -8,17 +8,16 @@ void ClientLeft::handleEvent(ParamBundle& paramBundle, const std::string& client
         return;
     }
 
-    u_int64_t currentTimeNumber = convert24HtoMinutes(current_time);
-    u_int64_t totalSpendTime = currentTimeNumber - it->second.first;
+    if(it->second.second == std::numeric_limits<uint64_t>::max()) { // если клиент не сидел    
+        paramBundle.mapUserToTable.erase(clientName);
+        return;
+    }
 
-    std::get<0>(paramBundle.tablesInfo[it->second.second]) += totalSpendTime;
-    std::get<1>(paramBundle.tablesInfo[it->second.second]) += (totalSpendTime / 60 + 1) * paramBundle.hourCost;
-    std::get<2>(paramBundle.tablesInfo[it->second.second]) = TableStatus::EMPTY;
-    paramBundle.leftoverTables += 1;
+    updateTableAfterLeaving(paramBundle, current_time, it->second.second, it->second.first);
 
     if(paramBundle.clientDeque.size() > 0) {
         std::string newClientName = paramBundle.clientDeque.front();
-        paramBundle.mapUserToTable[newClientName] = {currentTimeNumber,it->second.second};
+        paramBundle.mapUserToTable[newClientName] = {convert24HtoMinutes(current_time),it->second.second};
     
         std::get<2>(paramBundle.tablesInfo[it->second.second]) = TableStatus::OCCUPIED;
 

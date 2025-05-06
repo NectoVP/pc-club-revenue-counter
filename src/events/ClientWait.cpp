@@ -1,7 +1,13 @@
 #include "ClientWait.h"
 
 void ClientWait::handleEvent(ParamBundle& paramBundle, const std::string& clientName, const std::string& current_time, uint64_t tableNumber) const {
-        
+    auto it = paramBundle.mapUserToTable.find(clientName);
+    
+    if(it == paramBundle.mapUserToTable.end()) {
+        paramBundle.outputInterface->outputLine(current_time + " 13 ClientUnknown");
+        return;
+    }
+    
     if(paramBundle.leftoverTables > 0) {
         paramBundle.outputInterface->outputLine(current_time + " 13 ICanWaitNoLonger!");
         return;

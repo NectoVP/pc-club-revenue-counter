@@ -37,6 +37,8 @@ public:
     virtual ~EventHandler() = default;
 };
 
+void updateTableAfterLeaving(ParamBundle& paramBundle, const std::string& currentTime, u_int64_t oldChairNumber, u_int64_t oldTime);
+
 size_t convert24HtoMinutes(const std::string& str);
 
 std::string convertMinutesTo24H(u_int64_t minutes);

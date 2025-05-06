@@ -151,6 +151,9 @@ ValidationResultHandler Validator::validateBody(std::ifstream& file) const {
         if(possible_events.find(std::stoull(std::string(words[1]))) == possible_events.end())
             return ValidationResultHandler(ValidationStatus::INVALID_FORMAT, line);
 
+        if(words.size() == 3 && words[1] == "2")
+            return ValidationResultHandler(ValidationStatus::INVALID_FORMAT, line);
+
         if(words.size() == 3) {
             continue;
         }
