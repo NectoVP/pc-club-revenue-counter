@@ -15,6 +15,7 @@
 
 class RevenueCounter {
 public:
+    explicit RevenueCounter(const std::string& filePath, std::unique_ptr<OutputInterface>&& outputInterface);
     explicit RevenueCounter(const std::string& filePath);
 
     void calculateRevenue();

@@ -2,6 +2,7 @@
 
 #include "src/Validator.h"
 #include "src/RevenueCounter.h"
+//#include "src/output/OutputConsole.h"
 
 int main(int argc, char** argv) {
     //if(argc != 2) {

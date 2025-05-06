@@ -1,7 +1,9 @@
 cmake_minimum_required(VERSION 3.12)
-project(src)
 
-add_library(${PROJECT_NAME}
+add_subdirectory(output)
+add_subdirectory(events)
+
+add_library(src
     Validator.h
     Validator.cpp
     ValidationResultHandler.h
@@ -12,6 +14,5 @@ add_library(${PROJECT_NAME}
     Utility.cpp
 )
 
-add_subdirectory(events)
 
-target_link_libraries(${PROJECT_NAME} PUBLIC events)
+target_link_libraries(src PUBLIC output events)

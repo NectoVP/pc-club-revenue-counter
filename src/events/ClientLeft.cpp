@@ -1,10 +1,10 @@
 #include "ClientLeft.h"
 
-void ClientLeft::handleEvent(ParamBundle& paramBundle, std::string clientName, std::string_view current_time, uint64_t tableNumber) const {
+void ClientLeft::handleEvent(ParamBundle& paramBundle, const std::string& clientName, const std::string& current_time, uint64_t tableNumber) const {
     auto it = paramBundle.mapUserToTable.find(clientName);
 
     if(it == paramBundle.mapUserToTable.end()) {
-        std::cout << current_time << " 13 ClientUnknown";
+        paramBundle.outputInterface->outputLine(current_time + " 13 ClientUnknown");
         return;
     }
 
@@ -25,7 +25,7 @@ void ClientLeft::handleEvent(ParamBundle& paramBundle, std::string clientName, s
         paramBundle.leftoverTables -= 1;
         paramBundle.clientDeque.pop_front();
 
-        std::cout << current_time << " 12 " << newClientName << ' ' << it->second.second << '\n';
+        paramBundle.outputInterface->outputLine(current_time + " 12 " + newClientName + " " + std::to_string(it->second.second));
     }
 
     paramBundle.mapUserToTable.erase(clientName);

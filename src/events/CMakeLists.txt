@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.12)
-project(events)
 
-add_library(${PROJECT_NAME} 
+add_library(events
     EventHandler.h
     EventHandler.cpp
     ClientArrive.h
@@ -13,3 +12,5 @@ add_library(${PROJECT_NAME}
     ClientLeft.h
     ClientLeft.cpp
 )
+
+target_link_libraries(events PUBLIC output)

@@ -1,8 +1,7 @@
 #include "Utility.h"
 
-std::vector<std::string_view> getWords(std::string_view text)
-{
-    std::vector<std::string_view> words;
+std::vector<std::string> getWords(std::string_view text) {
+    std::vector<std::string> words;
     size_t start = text.find_first_not_of(' ');
 
     while (start != std::string_view::npos) {

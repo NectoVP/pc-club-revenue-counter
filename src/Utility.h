@@ -3,4 +3,4 @@
 #include <vector>
 #include <string>
 
-std::vector<std::string_view> getWords(std::string_view text);
+std::vector<std::string> getWords(std::string_view text);

@@ -1,27 +1,34 @@
 #include "RevenueCounter.h"
 
-RevenueCounter::RevenueCounter(const std::string& filePath) : filePath(filePath) {
+#include "output/OutputConsole.h"
+
+RevenueCounter::RevenueCounter(const std::string& filePath, std::unique_ptr<OutputInterface>&& outputInterface) 
+    : filePath(filePath)
+    , paramBundle(std::move(outputInterface)) {
+    
     events.emplace(1, std::make_unique<ClientArrive>());
     events.emplace(2, std::make_unique<ClientSit>());
     events.emplace(3, std::make_unique<ClientWait>());
     events.emplace(4, std::make_unique<ClientLeft>());
 }
 
+RevenueCounter::RevenueCounter(const std::string& filePath) : RevenueCounter(filePath, std::make_unique<OutputConsole>()) {
+}
+
 void RevenueCounter::calculateRevenue() {
     std::ifstream file(filePath);
 
     if(!file.is_open()) {
-        std::cout << "File was not opened!\n";
+        paramBundle.outputInterface->outputLine("File was not opened!");
         return;
     }
 
     init(file);
 
-    std::cout << startTimeStr << std::endl;
+    paramBundle.outputInterface->outputLine(startTimeStr);
 
     parseEvents(file);
 
-    
     std::vector<std::string> leftoverClients;
     for (const auto& pair : paramBundle.mapUserToTable)
         leftoverClients.push_back(pair.first);
@@ -29,11 +36,16 @@ void RevenueCounter::calculateRevenue() {
     
     for (const auto& key : leftoverClients)
         events[4]->handleEvent(paramBundle, key, endTimeStr, 0);
-
-    std::cout << endTimeStr << std::endl;
+    
+    paramBundle.outputInterface->outputLine(endTimeStr);
 
     for(int i = 1; i <= tableCount; ++i)
-        std::cout << i << ' ' << std::get<1>(paramBundle.tablesInfo[i]) << ' ' << convertMinutesTo24H(std::get<0>(paramBundle.tablesInfo[i])) << std::endl;
+        paramBundle.outputInterface->outputLine(
+            std::to_string(i)
+            + " " 
+            + std::to_string(std::get<1>(paramBundle.tablesInfo[i]))
+            + " "
+            + convertMinutesTo24H(std::get<0>(paramBundle.tablesInfo[i])));
 
     file.close();
 }
@@ -62,15 +74,16 @@ void RevenueCounter::parseEvents(std::ifstream& file) {
     while(std::getline(file, line)) {
         if(line.empty())
             return;
-        std::cout << line << std::endl;
+        paramBundle.outputInterface->outputLine(line);
         
         auto words = getWords(line);
         u_int64_t currentTime = convert24HtoMinutes(words[0]);
         if(currentTime < startTime || currentTime > endTime) {
-            std::cout << words[0] << " 13 NotOpenYet\n";
+            paramBundle.outputInterface->outputLine(words[0] + " 13 NotOpenYet");
             continue;
         }
-        u_int64_t tableNumber = words.size() == 4 ? std::stoull(std::string(words[3])) : 0;
-        events[std::stoull(std::string(words[1]))]->handleEvent(paramBundle, std::string(words[2]), words[0], tableNumber);
+        
+        u_int64_t tableNumber = words.size() == 4 ? std::stoull(words[3]) : 0;
+        events[std::stoull(words[1])]->handleEvent(paramBundle, words[2], words[0], tableNumber);
     }
 }

@@ -1,15 +1,15 @@
 #include "ClientWait.h"
 
-void ClientWait::handleEvent(ParamBundle& paramBundle, std::string clientName, std::string_view current_time, uint64_t tableNumber) const {
+void ClientWait::handleEvent(ParamBundle& paramBundle, const std::string& clientName, const std::string& current_time, uint64_t tableNumber) const {
         
     if(paramBundle.leftoverTables > 0) {
-        std::cout << current_time << " 13 ICanWaitNoLonger!\n";
+        paramBundle.outputInterface->outputLine(current_time + " 13 ICanWaitNoLonger!");
         return;
     }
 
     if(paramBundle.clientDeque.size() > paramBundle.tablesInfo.size() - 1) {
         paramBundle.mapUserToTable.erase(clientName);
-        std::cout << current_time << " 11 " << clientName << '\n';
+        paramBundle.outputInterface->outputLine(current_time + " 11 " + clientName);
         return;
     }
 
