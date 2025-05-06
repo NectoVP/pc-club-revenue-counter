@@ -6,20 +6,22 @@
 #include "src/output/OutputVector.h"
 
 int main(int argc, char** argv) {
-    //if(argc != 2) {
-    //    std::cout << "one file need to be provided";
-    //    return -1;
-    //}
+    if(argc != 2) {
+        std::cout << "one file need to be provided";
+        return -1;
+    }
 
-    //Validator validator(argv[1]);
+    Validator validator(argv[1]);
     
-    Validator validator("../file.txt");
     auto res = validator.validateFile();
-    //std::cout << res.getStatus() << "\t" << res.getErrorString() << std::endl;
+    
+    if(res.getStatus() != ValidationStatus::CORRECT) {
+        std::cout << res.getErrorString() << std::endl;
+        return -1;
+    }
 
-    RevenueCounter revenueCounter("../file.txt");
-    if(res.getStatus() == ValidationStatus::CORRECT)
-        revenueCounter.calculateRevenue();
+    RevenueCounter revenueCounter(argv[1]);
+    revenueCounter.calculateRevenue();
     
     return 0;
 }
