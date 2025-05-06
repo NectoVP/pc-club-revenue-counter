@@ -12,10 +12,11 @@
 #include "events/ClientSit.h"
 #include "events/ClientWait.h"
 #include "events/ClientLeft.h"
+#include "events/ClientEndOfDay.h"
 
 class RevenueCounter {
 public:
-    explicit RevenueCounter(const std::string& filePath, std::unique_ptr<OutputInterface>&& outputInterface);
+    explicit RevenueCounter(const std::string& filePath, const std::shared_ptr<OutputInterface>& outputInterface);
     explicit RevenueCounter(const std::string& filePath);
 
     void calculateRevenue();

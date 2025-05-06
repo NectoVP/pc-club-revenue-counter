@@ -14,6 +14,7 @@ enable_testing()
 add_executable(
     ${PROJECT_NAME}
     ValidatorTests.cpp
+    RevenueCounterTests.cpp
 )
 
 target_link_libraries(${PROJECT_NAME} 

@@ -2,7 +2,8 @@
 
 #include "src/Validator.h"
 #include "src/RevenueCounter.h"
-//#include "src/output/OutputConsole.h"
+#include "src/output/OutputConsole.h"
+#include "src/output/OutputVector.h"
 
 int main(int argc, char** argv) {
     //if(argc != 2) {
@@ -19,6 +20,6 @@ int main(int argc, char** argv) {
     RevenueCounter revenueCounter("../file.txt");
     if(res.getStatus() == ValidationStatus::CORRECT)
         revenueCounter.calculateRevenue();
-
+    
     return 0;
 }

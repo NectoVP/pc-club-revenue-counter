@@ -2,14 +2,15 @@
 
 #include "output/OutputConsole.h"
 
-RevenueCounter::RevenueCounter(const std::string& filePath, std::unique_ptr<OutputInterface>&& outputInterface) 
+RevenueCounter::RevenueCounter(const std::string& filePath, const std::shared_ptr<OutputInterface>& outputInterface) 
     : filePath(filePath)
-    , paramBundle(std::move(outputInterface)) {
+    , paramBundle(outputInterface) {
     
     events.emplace(1, std::make_unique<ClientArrive>());
     events.emplace(2, std::make_unique<ClientSit>());
     events.emplace(3, std::make_unique<ClientWait>());
     events.emplace(4, std::make_unique<ClientLeft>());
+    events.emplace(5, std::make_unique<ClientEndOfDay>());
 }
 
 RevenueCounter::RevenueCounter(const std::string& filePath) : RevenueCounter(filePath, std::make_unique<OutputConsole>()) {
@@ -35,7 +36,7 @@ void RevenueCounter::calculateRevenue() {
     std::sort(leftoverClients.begin(), leftoverClients.end());
     
     for (const auto& key : leftoverClients)
-        events[4]->handleEvent(paramBundle, key, endTimeStr, 0);
+        events[5]->handleEvent(paramBundle, key, endTimeStr, 0);
     
     paramBundle.outputInterface->outputLine(endTimeStr);
 

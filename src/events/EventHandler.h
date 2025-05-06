@@ -15,7 +15,7 @@ enum TableStatus {
 };
 
 struct ParamBundle {
-    ParamBundle(std::unique_ptr<OutputInterface>&& outputInterface) : outputInterface(std::move(outputInterface)) {}
+    ParamBundle(const std::shared_ptr<OutputInterface>& outputInterface) : outputInterface(outputInterface) {}
 
     //key - client, value - pair(user arrival time, table number)
     std::unordered_map<std::string, std::pair<u_int64_t, u_int64_t>> mapUserToTable;
@@ -25,7 +25,7 @@ struct ParamBundle {
 
     std::deque<std::string> clientDeque;
 
-    std::unique_ptr<OutputInterface> outputInterface;
+    std::shared_ptr<OutputInterface> outputInterface;
 
     u_int64_t leftoverTables = 0;
     u_int64_t hourCost = 0;

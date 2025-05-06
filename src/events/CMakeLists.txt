@@ -11,6 +11,8 @@ add_library(events
     ClientSit.cpp
     ClientLeft.h
     ClientLeft.cpp
+    ClientEndOfDay.h
+    ClientEndOfDay.cpp
 )
 
 target_link_libraries(events PUBLIC output)
